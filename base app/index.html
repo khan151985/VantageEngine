@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vantage Engine - 3D Interactive Map Builder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/viewer.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+
+<body class="theme-dark">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loader-content">
+            <img src="assets/vantage-logo.jpg" class="loader-logo" alt="Vantage Engine"
+                style="width: 150px; height: auto; object-fit: contain; border-radius: 6px; margin-bottom: 20px;">
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
+            </div>
+            <p class="loader-text">Loading...</p>
+        </div>
+    </div>
+
+    <!-- App Container -->
+    <div id="app" class="app-container" style="display: none;">
+
+        <!-- Top Menu Bar (Admin Mode) -->
+        <header id="admin-header" class="admin-header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="assets/vantage-logo.jpg" alt="Vantage Engine"
+                        style="height: 32px; width: auto; border-radius: 4px;">
+                </div>
+
+                <nav class="main-menu">
+                    <div class="menu-item" data-menu="file">
+                        <span>File</span>
+                        <div class="dropdown-menu">
+                            <button data-action="new-project"><span class="menu-icon">📄</span> New Project <span
+                                    class="shortcut">Ctrl+N</span></button>
+                            <button data-action="open-project"><span class="menu-icon">📂</span> Open Project <span
+                                    class="shortcut">Ctrl+O</span></button>
+                            <div class="menu-divider"></div>
+                            <button data-action="save-project"><span class="menu-icon">💾</span> Save <span
+                                    class="shortcut">Ctrl+S</span></button>
+                            <button data-action="save-as"><span class="menu-icon">💾</span> Save As... <span
+                                    class="shortcut">Ctrl+Shift+S</span></button>
+                            <div class="menu-divider"></div>
+                            <button data-action="import-data"><span class="menu-icon">📥</span> Import Data
+                                File</button>
+                            <button data-action="export-data"><span class="menu-icon">📤</span> Export Data
+                                File</button>
+                            <div class="menu-divider"></div>
+                            <button data-action="export-web"><span class="menu-icon">🌐</span> Export Web Package <span
+                                    class="shortcut">Ctrl+E</span></button>
+                            <button data-action="export-windows"><span class="menu-icon">🪟</span> Export Windows
+                                Executable</button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-menu="add">
+                        <span>Add</span>
+                        <div class="dropdown-menu">
+                            <button data-action="add-mesh"><span class="menu-icon">🎲</span> 3D Mesh <span
+                                    class="shortcut">M</span></button>
+                            <button data-action="add-point"><span class="menu-icon">📍</span> Interactable Point <span
+                                    class="shortcut">P</span></button>
+                            <div class="menu-divider"></div>
+                            <button data-action="add-textbox"><span class="menu-icon">📝</span> Text Box <span
+                                    class="shortcut">T</span></button>
+                            <button data-action="add-media"><span class="menu-icon">🎬</span> Media
+                                (Video/Audio)</button>
+                            <button data-action="add-panorama"><span class="menu-icon">🌐</span> 360° Panorama</button>
+                            <div class="menu-divider"></div>
+                            <button data-action="add-menu-button"><span class="menu-icon">📁</span> Menu
+                                Category</button>
+                            <button data-action="add-language"><span class="menu-icon">🌍</span> Language</button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-menu="view">
+                        <span>View</span>
+                        <div class="dropdown-menu">
+                            <button data-action="toggle-grid"><span class="menu-icon">⊞</span> Show Grid <span
+                                    class="check">✓</span></button>
+                            <button data-action="toggle-points"><span class="menu-icon">📍</span> Show All Points <span
+                                    class="check">✓</span></button>
+                            <button data-action="toggle-gizmos"><span class="menu-icon">🎯</span> Show Gizmos <span
+                                    class="check">✓</span></button>
+                            <div class="menu-divider"></div>
+                            <button data-action="reset-camera"><span class="menu-icon">🎥</span> Reset Camera <span
+                                    class="shortcut">Home</span></button>
+
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-menu="animations">
+                        <span>Animations</span>
+                        <div class="dropdown-menu">
+                            <button data-action="path-animations"><span class="menu-icon">🛤️</span> Path
+                                Animations</button>
+                            <div class="menu-divider"></div>
+                            <button data-action="toggle-path-visibility"><span class="menu-icon">👁</span> Show/Hide
+                                Paths <span class="check">✓</span></button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-menu="settings">
+                        <span>Settings</span>
+                        <div class="dropdown-menu">
+                            <button data-action="project-settings"><span class="menu-icon">⚙️</span> Project
+                                Settings</button>
+                            <button data-action="api-settings"><span class="menu-icon">🔑</span> API
+                                Configuration</button>
+                            <div class="menu-divider"></div>
+                            <button data-action="theme-light"><span class="menu-icon">☀️</span> Light Theme</button>
+                            <button data-action="theme-dark"><span class="menu-icon">🌙</span> Dark Theme <span
+                                    class="check">✓</span></button>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="header-center">
+                <div class="toolbar">
+                    <button class="tool-btn" id="undo-btn" data-action="undo" title="Undo (Ctrl+Z)" disabled>
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="currentColor"
+                                d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
+                        </svg>
+                    </button>
+                    <button class="tool-btn" id="redo-btn" data-action="redo" title="Redo (Ctrl+Y)" disabled>
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="currentColor"
+                                d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z" />
+                        </svg>
+                    </button>
+                    <button class="tool-btn" id="refresh-btn" data-action="refresh" title="Refresh All (F5)">
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="currentColor"
+                                d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
+                        </svg>
+                    </button>
+                    <div class="tool-divider"></div>
+                    <!-- Transform Tool - Press V to cycle through Move/Scale/Rotate -->
+                    <button class="tool-btn" data-tool="select" title="Transform - Move (Press V to cycle)">
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="currentColor"
+                                d="M13 6v5h5V7.75L22.25 12 18 16.25V13h-5v5h3.25L12 22.25 7.75 18H11v-5H6v3.25L1.75 12 6 7.75V11h5V6H7.75L12 1.75 16.25 6H13z" />
+                        </svg>
+                    </button>
+                    <div class="tool-divider"></div>
+                    <button class="tool-btn" data-tool="add-point" title="Add Point (P)">
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="currentColor"
+                                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                        </svg>
+                    </button>
+                    <button class="tool-btn" data-tool="measure" title="Measure (U)">
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="currentColor"
+                                d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h2v8z" />
+                        </svg>
+                    </button>
+                    <!-- Clean Measurements Button -->
+                    <button class="tool-btn" id="btn-clear-measurements" title="Clear all measurements"
+                        style="width: auto; padding: 0 8px; font-size: 12px; margin-left: 5px;">
+                        🗑️ Clean
+                    </button>
+                </div>
+            </div>
+
+            <div class="header-right">
+
+                <button class="export-btn" data-action="export-web">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="currentColor"
+                            d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2v9.67z" />
+                    </svg>
+                    Export
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+
+            <!-- Left Panel (Admin) -->
+            <aside id="left-panel" class="left-panel">
+                <div class="panel-tabs">
+                    <button class="panel-tab active" data-tab="hierarchy">Hierarchy</button>
+                    <button class="panel-tab" data-tab="content">Content</button>
+                    <button class="panel-tab" data-tab="library">Library</button>
+                </div>
+
+                <!-- Hierarchy Tab -->
+                <div class="panel-content" id="hierarchy-tab">
+                    <!-- 3D Meshes -->
+                    <div class="panel-section">
+                        <div class="section-header">
+                            <span>3D Meshes</span>
+                            <div class="section-actions">
+                                <button class="section-add-btn folder-btn" data-action="add-mesh-folder"
+                                    title="Create Folder">📁</button>
+                                <button class="section-add-btn" data-action="add-mesh" title="Add Mesh">+</button>
+                            </div>
+                        </div>
+                        <div class="section-search-wrapper" style="padding: 0 10px 5px 10px;">
+                            <input type="text" class="section-search-input" data-target="mesh-list"
+                                placeholder="Search meshes..."
+                                style="width: 100%; padding: 4px 8px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 4px; color: white; font-size: 11px;">
+                        </div>
+                        <div class="tree-list" id="mesh-list">
+                            <div class="tree-empty">No meshes added</div>
+                        </div>
+                    </div>
+
+                    <!-- Menu Categories -->
+                    <div class="panel-section">
+                        <div class="section-header">
+                            <span>Menu Categories</span>
+                            <button class="section-add-btn" data-action="add-menu-button"
+                                title="Add Category">+</button>
+                        </div>
+                        <div class="section-search-wrapper" style="padding: 0 10px 5px 10px;">
+                            <input type="text" class="section-search-input" data-target="menu-list"
+                                placeholder="Search categories..."
+                                style="width: 100%; padding: 4px 8px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 4px; color: white; font-size: 11px;">
+                        </div>
+                        <div class="tree-list" id="menu-list">
+                            <div class="tree-empty">No categories added</div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Interactable Points -->
+                    <div class="panel-section">
+                        <div class="section-header">
+                            <span>Interactable Points</span>
+                            <div class="section-actions">
+                                <button class="section-add-btn folder-btn" data-action="add-point-folder"
+                                    title="Create Folder">📁</button>
+                                <button class="section-add-btn" data-action="add-point" title="Add Point">+</button>
+                            </div>
+                        </div>
+                        <div class="section-search-wrapper" style="padding: 0 10px 5px 10px;">
+                            <input type="text" class="section-search-input" data-target="points-list"
+                                placeholder="Search points..."
+                                style="width: 100%; padding: 4px 8px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 4px; color: white; font-size: 11px;">
+                        </div>
+                        <div class="tree-list" id="points-list">
+                            <div class="tree-empty">No points added</div>
+                        </div>
+                    </div>
+
+                    <!-- Borders -->
+                    <div class="panel-section">
+                        <div class="section-header">
+                            <span>Borders</span>
+                            <div class="section-actions">
+                                <button class="section-add-btn folder-btn" data-action="add-border-folder"
+                                    title="Create Folder">📁</button>
+                                <button class="section-add-btn" data-action="draw-border"
+                                    title="Draw Border">✏️</button>
+                            </div>
+                        </div>
+                        <div class="section-search-wrapper" style="padding: 0 10px 5px 10px;">
+                            <input type="text" class="section-search-input" data-target="borders-list"
+                                placeholder="Search borders..."
+                                style="width: 100%; padding: 4px 8px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 4px; color: white; font-size: 11px;">
+                        </div>
+                        <div class="tree-list" id="borders-list">
+                            <div class="tree-empty">No borders drawn</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Content Tab -->
+                <div class="panel-content hidden" id="content-tab">
+                    <div class="panel-section">
+                        <div class="section-header">
+                            <span>Text Boxes</span>
+                            <div class="section-actions">
+                                <button class="section-add-btn folder-btn" data-action="add-textbox-folder"
+                                    title="Create Folder">📁</button>
+                                <button class="section-add-btn" data-action="add-textbox"
+                                    title="Add Text Box">+</button>
+                            </div>
+                        </div>
+                        <div class="section-search-wrapper" style="padding: 0 10px 5px 10px;">
+                            <input type="text" class="section-search-input" data-target="textbox-list"
+                                placeholder="Search textboxes..."
+                                style="width: 100%; padding: 4px 8px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 4px; color: white; font-size: 11px;">
+                        </div>
+                        <div class="tree-list" id="textbox-list">
+                            <div class="tree-empty">No text boxes added</div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <div class="section-header">
+                            <span>Languages</span>
+                            <button class="section-add-btn" data-action="add-language" title="Add Language">+</button>
+                        </div>
+                        <div class="tree-list" id="language-list">
+                            <div class="tree-item">
+                                <span class="tree-icon">🌍</span>
+                                <span>English (EN)</span>
+                                <span class="tree-badge default">Default</span>
+                            </div>
+                        </div>
+                        <button class="translate-all-btn" id="translate-all-btn" style="margin-top: 8px;">
+                            <span class="icon">✨</span>
+                            <span>Translate All Content</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Library Tab -->
+                <div class="panel-content hidden" id="library-tab">
+                    <div class="panel-section">
+                        <div class="section-header">
+                            <span>3D Models</span>
+                            <button class="section-add-btn" data-action="add-mesh" title="Add Model">+</button>
+                        </div>
+                        <div class="library-grid" id="library-models">
+                            <div class="tree-empty">No models uploaded</div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <div class="section-header">
+                            <span>Images</span>
+                            <button class="section-add-btn" data-action="add-image" title="Add Image">+</button>
+                        </div>
+                        <div class="library-grid" id="library-images">
+                            <div class="tree-empty">No images uploaded</div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <div class="section-header">
+                            <span>Videos</span>
+                            <button class="section-add-btn" data-action="add-video" title="Add Video">+</button>
+                        </div>
+                        <div class="library-grid" id="library-videos">
+                            <div class="tree-empty">No videos uploaded</div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <div class="section-header">
+                            <span>Audio</span>
+                            <button class="section-add-btn" data-action="add-audio" title="Add Audio">+</button>
+                        </div>
+                        <div class="library-grid" id="library-audio">
+                            <div class="tree-empty">No audio uploaded</div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <div class="section-header">
+                            <span>360° Panoramas</span>
+                            <button class="section-add-btn" data-action="add-panorama" title="Add Panorama">+</button>
+                        </div>
+                        <div class="library-grid" id="library-panoramas">
+                            <div class="tree-empty">No panoramas uploaded</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 3D Viewport -->
+            <main class="viewport-container">
+                <div id="viewport" class="viewport">
+                    <canvas id="three-canvas"></canvas>
+
+                    <!-- Auto-Select Toggle -->
+                    <div class="viewport-settings-overlay"
+                        style="position: absolute; top: 10px; left: 10px; z-index: 5; background: rgba(0,0,0,0.6); padding: 5px 10px; border-radius: 4px; display: flex; align-items: center; gap: 8px;">
+                        <label for="viewport-auto-select"
+                            style="color: white; font-size: 12px; cursor: pointer; user-select: none; display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="viewport-auto-select" checked>
+                            Auto-Select
+                        </label>
+                    </div>
+
+
+
+                    <!-- Viewport Info -->
+                    <div class="viewport-info">
+                        <span id="fps-counter">60 FPS</span>
+                        <span id="distance-display" style="display: none;">Dist: --</span>
+                        <span id="memory-usage">0 MB</span>
+                    </div>
+
+                    <!-- Point Creation Tooltip -->
+                    <div id="point-tooltip" class="point-tooltip hidden">
+                        Click to place point
+                    </div>
+                </div>
+
+                <!-- Bottom Timeline/Animation Panel -->
+                <div id="animation-panel" class="animation-panel hidden">
+                    <div class="animation-header">
+                        <span class="animation-title">Animation</span>
+                        <div class="animation-controls">
+                            <button class="anim-btn" data-action="anim-start">⏮</button>
+                            <button class="anim-btn" data-action="anim-play">▶</button>
+                            <button class="anim-btn" data-action="anim-stop">⏹</button>
+                            <button class="anim-btn" data-action="anim-end">⏭</button>
+                        </div>
+                        <div class="animation-options">
+                            <label>
+                                <input type="checkbox" id="anim-loop"> Loop
+                            </label>
+                            <label>
+                                Speed: <input type="number" id="anim-speed" value="1" min="0.1" max="5" step="0.1">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="animation-timeline">
+                        <div class="timeline-track">
+                            <div class="timeline-progress" style="width: 0%"></div>
+                            <div class="timeline-cursor" style="left: 0%"></div>
+                        </div>
+                        <div class="timeline-labels">
+                            <span>0:00</span>
+                            <span id="anim-duration">0:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Border Drawing Toolbar -->
+                <div id="border-drawing-toolbar" class="border-drawing-toolbar hidden">
+                    <div class="bdt-header">
+                        <span class="bdt-title">✏️ Drawing Border</span>
+                        <span id="bdt-point-count" class="bdt-count">0 points</span>
+                    </div>
+                    <div class="bdt-options">
+                        <label>Name: <input type="text" id="bdt-name" placeholder="Border Name"></label>
+                        <label>Color: <input type="color" id="bdt-color" value="#FFFF00"></label>
+                        <label>Width: <input type="number" id="bdt-width" value="100" min="1" max="10000"></label>
+                    </div>
+                    <div class="bdt-actions">
+                        <button class="btn btn-success" id="bdt-save-btn">✓ Save Border</button>
+                        <button class="btn btn-secondary" id="bdt-cancel-btn">✗ Cancel</button>
+                    </div>
+                    <p class="bdt-hint">Click on mesh to add points. Min 3 points required.</p>
+                </div>
+
+                <!-- Path Drawing Toolbar -->
+
+            </main>
+
+            <!-- Right Panel (Properties) -->
+            <aside id="right-panel" class="right-panel">
+                <div class="panel-header-main">
+                    <span>Properties</span>
+                </div>
+
+                <!-- Default State -->
+                <div class="properties-empty" id="props-empty">
+                    <div class="empty-icon">📋</div>
+                    <p>Select an item to view its properties</p>
+                </div>
+
+                <!-- 3D Model Settings -->
+                <div class="properties-section hidden" id="props-model">
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>3D Model Settings</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>File</label>
+                                <span class="prop-value" id="model-filename">Untitled.glb</span>
+                            </div>
+                            <div class="prop-row">
+                                <label>Name</label>
+                                <input type="text" id="model-name" value="Untitled">
+                            </div>
+                            <div class="prop-row">
+                                <label>Subtitle</label>
+                                <input type="text" id="model-subtitle" placeholder="Optional subtitle">
+                            </div>
+                            <div class="prop-row">
+                                <label>Thumbnail</label>
+                                <div class="thumbnail-box" id="model-thumbnail">
+                                    <button class="thumbnail-upload">📷 Upload</button>
+                                </div>
+                            </div>
+                            <div class="prop-row">
+                                <label>World Unit</label>
+                                <div class="prop-inline">
+                                    <input type="number" id="world-unit" value="100" min="1">
+                                    <select id="world-unit-type">
+                                        <option value="meters">meters</option>
+                                        <option value="feet">feet</option>
+                                        <option value="units">units</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Transform</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row triple">
+                                <label>Position</label>
+                                <input type="number" placeholder="X" id="model-pos-x" value="0" step="0.1">
+                                <input type="number" placeholder="Y" id="model-pos-y" value="0" step="0.1">
+                                <input type="number" placeholder="Z" id="model-pos-z" value="0" step="0.1">
+                            </div>
+                            <div class="prop-row triple">
+                                <label>Rotation</label>
+                                <input type="number" placeholder="X" id="model-rot-x" value="0" step="1">
+                                <input type="number" placeholder="Y" id="model-rot-y" value="0" step="1">
+                                <input type="number" placeholder="Z" id="model-rot-z" value="0" step="1">
+                            </div>
+                            <div class="prop-row triple">
+                                <label>Scale</label>
+                                <input type="number" placeholder="X" id="model-scale-x" value="1" step="0.1">
+                                <input type="number" placeholder="Y" id="model-scale-y" value="1" step="0.1">
+                                <input type="number" placeholder="Z" id="model-scale-z" value="1" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>👁️ Visibility</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>Visible on Load</label>
+                                <label class="toggle">
+                                    <input type="checkbox" id="mesh-visible-on-load" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="prop-row" style="flex-wrap: wrap; height: auto;">
+                                <label style="width: 100%; margin-bottom: 8px;">Load on Platforms</label>
+                                <div class="platform-checkboxes" style="flex-wrap: wrap;">
+                                    <label class="platform-checkbox" title="PC/Desktop">
+                                        <input type="checkbox" id="mesh-load-pc" checked>
+                                        <span>PC</span>
+                                    </label>
+                                    <label class="platform-checkbox" title="Android Devices">
+                                        <input type="checkbox" id="mesh-load-android" checked>
+                                        <span>Android</span>
+                                    </label>
+                                    <label class="platform-checkbox" title="iPhone and iPad">
+                                        <input type="checkbox" id="mesh-load-ios" checked>
+                                        <span>iPhone</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="prop-row">
+                                <label>Toggle When</label>
+                                <select id="mesh-visibility-trigger">
+                                    <option value="none">None (manual)</option>
+                                    <option value="category">Category clicked</option>
+                                    <option value="point">Point clicked</option>
+                                    <option value="actionButton">Action Button clicked</option>
+                                </select>
+                            </div>
+                            <div class="prop-row" id="mesh-visibility-target-row" style="display: none;">
+                                <label>Target</label>
+                                <select id="mesh-visibility-target">
+                                    <option value="">Select...</option>
+                                </select>
+                            </div>
+                            <div class="prop-row"
+                                style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">
+                                <label>Toggle with Mesh Button</label>
+                                <label class="toggle">
+                                    <input type="checkbox" id="mesh-toggle-button-enabled">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Custom Toggle Button Options -->
+                            <div id="mesh-toggle-options"
+                                style="display: none; padding-left: 10px; border-left: 2px solid var(--accent);">
+                                <div class="prop-row">
+                                    <label>Button Icon</label>
+                                    <div class="icon-upload-container">
+                                        <div class="icon-preview" id="mesh-toggle-icon-preview">
+                                            <span class="upload-placeholder">🖼️</span>
+                                        </div>
+                                        <input type="file" id="mesh-toggle-icon-file" accept="image/*"
+                                            style="display: none;">
+                                        <div class="icon-actions hidden" id="mesh-toggle-icon-actions">
+                                            <button class="icon-action-btn" id="change-mesh-toggle-icon"
+                                                title="Change Icon">✏️</button>
+                                            <button class="icon-action-btn" id="remove-mesh-toggle-icon"
+                                                title="Remove Icon">🗑️</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="prop-row">
+                                    <label>Tooltip Text</label>
+                                    <input type="text" id="mesh-toggle-tooltip" placeholder="e.g. Show Roof">
+                                </div>
+                            </div>
+
+                            <p class="field-hint" id="mesh-toggle-hint" style="display: none; margin-top: 4px;">
+                                Shows a custom button in the header to toggle this mesh.
+                            </p>
+
+                            <div class="prop-row"
+                                style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">
+                                <label>Texture Variant</label>
+                                <label class="toggle">
+                                    <input type="checkbox" id="mesh-texture-variant-enabled">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div id="mesh-texture-variant-options"
+                                style="display: none; padding-left: 10px; border-left: 2px solid var(--accent);">
+                                <div class="prop-row">
+                                    <label>Button Icon</label>
+                                    <div class="icon-upload-container">
+                                        <div class="icon-preview" id="mesh-texture-variant-icon-preview">
+                                            <span class="upload-placeholder">🖼️</span>
+                                        </div>
+                                        <input type="file" id="mesh-texture-variant-icon-file" accept="image/*"
+                                            style="display: none;">
+                                        <div class="icon-actions hidden" id="mesh-texture-variant-icon-actions">
+                                            <button class="icon-action-btn" id="change-mesh-texture-variant-icon"
+                                                title="Change Icon">✏️</button>
+                                            <button class="icon-action-btn" id="remove-mesh-texture-variant-icon"
+                                                title="Remove Icon">🗑️</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="prop-row">
+                                    <label>Tooltip Text</label>
+                                    <input type="text" id="mesh-texture-variant-tooltip"
+                                        placeholder="e.g. Adjust Brightness">
+                                </div>
+                                <div class="prop-row">
+                                    <label>Brightness</label>
+                                    <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                                        <input type="range" id="mesh-texture-variant-brightness" min="0" max="300"
+                                            value="100" style="flex: 1;">
+                                        <span id="mesh-texture-variant-brightness-val"
+                                            style="min-width: 40px; text-align: center;">100%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="field-hint" id="mesh-texture-variant-hint"
+                                style="display: none; margin-top: 4px;">
+                                Shows a button to toggle texture brightness/variant.
+                            </p>
+
+                            <div class="prop-row"
+                                style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">
+                                <label>Use for Measurement</label>
+                                <label class="toggle">
+                                    <input type="checkbox" id="mesh-measurement-enabled" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <p class="field-hint"
+                                style="font-size: 11px; color: var(--text-tertiary); margin-top: 4px;">
+                                When disabled, measurement tool will ignore this mesh.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="prop-group" id="animation-settings" style="display: none;">
+                        <div class="prop-group-header">
+                            <span>Animations</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>Clip</label>
+                                <select id="anim-clip"></select>
+                            </div>
+                            <div class="prop-row">
+                                <label>Play Mode</label>
+                                <select id="anim-mode">
+                                    <option value="loop">Loop</option>
+                                    <option value="once">Play Once</option>
+                                    <option value="pingpong">Ping Pong</option>
+                                    <option value="timer">Timer Based</option>
+                                </select>
+                            </div>
+                            <div class="prop-row" id="timer-row" style="display: none;">
+                                <label>Interval (s)</label>
+                                <input type="number" id="anim-interval" value="5" min="1">
+                            </div>
+                            <div class="prop-row">
+                                <label>Auto Play</label>
+                                <input type="checkbox" id="anim-autoplay" checked>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Transform Gizmo</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="gizmo-mode-buttons">
+                                <button class="gizmo-btn active" data-mode="translate" title="Move (G)">
+                                    <svg viewBox="0 0 24 24" width="20" height="20">
+                                        <path fill="currentColor"
+                                            d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z" />
+                                    </svg>
+                                </button>
+                                <button class="gizmo-btn" data-mode="rotate" title="Rotate (R)">
+                                    <svg viewBox="0 0 24 24" width="20" height="20">
+                                        <path fill="currentColor"
+                                            d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" />
+                                    </svg>
+                                </button>
+                                <button class="gizmo-btn" data-mode="scale" title="Scale (S)">
+                                    <svg viewBox="0 0 24 24" width="20" height="20">
+                                        <path fill="currentColor"
+                                            d="M19 12h-2v3h-3v2h5v-5zM7 9h3V7H5v5h2V9zm14-6H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group danger-zone">
+                        <button class="btn btn-danger full" id="delete-mesh-btn">🗑️ Delete Mesh</button>
+                    </div>
+                </div>
+
+                <!-- Point Settings -->
+                <div class="properties-section hidden" id="props-point">
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Point Settings</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>Name</label>
+                                <input type="text" id="point-name" value="New Point">
+                            </div>
+                            <div class="prop-row">
+                                <label>Category</label>
+                                <select id="point-category">
+                                    <option value="">None</option>
+                                </select>
+                            </div>
+                            <div class="prop-row">
+                                <label>Content</label>
+                                <input type="text" id="point-content-search" placeholder="Search content..."
+                                    class="search-input-small" style="margin-bottom: 5px; width: 100%;">
+                                <select id="point-content">
+                                    <option value="">None</option>
+                                </select>
+                            </div>
+                            <div class="prop-row">
+                                <label>Point Type</label>
+                                <div class="toggle-group">
+                                    <button class="toggle-btn active" data-value="2d">2D</button>
+                                    <button class="toggle-btn" data-value="3d">3D</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Multilingual Names</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content" id="point-names-container">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Actions</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <button class="btn duplicate-btn" id="duplicate-point-btn">📋 Duplicate Point</button>
+                            <button class="btn btn-danger full" id="delete-point-btn" style="margin-top: 8px;">🗑️
+                                Delete Point</button>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Position</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row triple">
+                                <label>Position</label>
+                                <input type="number" placeholder="X" id="point-pos-x" value="0" step="0.1">
+                                <input type="number" placeholder="Y" id="point-pos-y" value="0" step="0.1">
+                                <input type="number" placeholder="Z" id="point-pos-z" value="0" step="0.1">
+                            </div>
+                            <div class="prop-row">
+                                <label>Lifted</label>
+                                <input type="checkbox" id="point-lifted">
+                            </div>
+                            <div class="prop-row" id="lift-height-row" style="display: none;">
+                                <label>Lift Height</label>
+                                <input type="number" id="point-lift-height" value="5" min="0" step="0.5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Camera View</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <button class="prop-btn full" id="set-camera-view">📷 Set Current View</button>
+                            <button class="prop-btn full secondary" id="preview-camera-view">👁 Preview View</button>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Styling</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>Icon</label>
+                                <select id="point-icon">
+                                    <option value="default">Default Marker</option>
+                                    <option value="custom">Custom Image</option>
+                                </select>
+                            </div>
+                            <div class="prop-row hidden" id="custom-icon-row">
+                                <label>Image</label>
+                                <div class="custom-icon-upload">
+                                    <div class="icon-preview" id="point-icon-preview">
+                                        <span class="upload-placeholder">🖼️ Click to upload</span>
+                                    </div>
+                                    <input type="file" id="point-icon-file" accept="image/*" hidden>
+                                    <div class="icon-actions hidden" id="point-icon-actions">
+                                        <button class="btn btn-sm" id="change-point-icon">Change</button>
+                                        <button class="btn btn-sm btn-danger" id="remove-point-icon">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="prop-row">
+                                <label>Color</label>
+                                <input type="color" id="point-color" value="#00C8FF">
+                            </div>
+                            <div class="prop-row">
+                                <label>Scale</label>
+                                <input type="range" id="point-scale" min="0.5" max="3" step="0.1" value="1">
+                                <span class="range-value">1x</span>
+                            </div>
+                            <div class="prop-row"
+                                style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">
+                                <label>Show Icon in Menu</label>
+                                <label class="toggle">
+                                    <input type="checkbox" id="point-show-icon-in-menu">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <p class="field-hint" id="menu-icon-hint" style="display: none; margin-top: 4px;">
+                                Upload a custom icon above to display it in the menu.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>🔊 Click Sound</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>Sound</label>
+                                <select id="point-click-sound-source">
+                                    <option value="none">None (Use Default)</option>
+                                    <option value="url">Custom URL</option>
+                                </select>
+                            </div>
+                            <div id="point-sound-url-section" class="hidden" style="margin-top: 8px;">
+                                <input type="text" id="point-click-sound-url"
+                                    placeholder="https://example.com/sound.mp3" style="width: 100%;">
+                                <p class="field-hint">ℹ️ Direct link to MP3/OGG/WAV file</p>
+                                <button class="btn btn-secondary btn-sm" id="preview-point-sound"
+                                    style="margin-top: 8px;">▶
+                                    Preview</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>🚩 3D Marker</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>Show 3D Mesh</label>
+                                <label class="toggle">
+                                    <input type="checkbox" id="point-show-3d-mesh" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <p class="field-hint">When enabled, the 3D marker mesh (if configured in Project Settings)
+                                will appear at this point when clicked.</p>
+
+                            <div class="prop-row" style="margin-top: 12px;">
+                                <label>Mesh Scale</label>
+                                <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                                    <input type="range" id="point-mesh-scale" min="0.1" max="1000" step="0.1" value="1"
+                                        style="flex: 1;">
+                                    <span id="point-mesh-scale-value"
+                                        style="min-width: 40px; text-align: center;">1x</span>
+                                </div>
+                            </div>
+
+                            <div class="prop-row" style="margin-top: 8px;">
+                                <label>Apply to All Points</label>
+                                <label class="toggle">
+                                    <input type="checkbox" id="point-mesh-scale-apply-all">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <p class="field-hint">If enabled, this scale will apply to all points. Otherwise, only this
+                                point.</p>
+
+                            <div class="prop-row" style="margin-top: 12px;">
+                                <label>Mesh Rotation</label>
+                                <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                                    <input type="range" id="point-mesh-rotation" min="0" max="360" step="1" value="0"
+                                        style="flex: 1;">
+                                    <span id="point-mesh-rotation-value"
+                                        style="min-width: 40px; text-align: center;">0°</span>
+                                </div>
+                            </div>
+
+                            <div class="prop-row" style="margin-top: 8px;">
+                                <label>Apply Rotation to All</label>
+                                <label class="toggle">
+                                    <input type="checkbox" id="point-mesh-rotation-apply-all">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <button class="prop-btn full secondary" id="preview-3d-marker" style="margin-top: 12px;">
+                                👁️ Preview Marker at Point
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>👁️ Mesh Visibility</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <p class="field-hint" style="margin-bottom: 8px;">Toggle meshes when this point is clicked:
+                            </p>
+                            <input type="text" id="point-mesh-search" placeholder="Search meshes..."
+                                style="width: 100%; margin-bottom: 8px; padding: 6px 8px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 4px; color: var(--text);"
+                                oninput="document.querySelectorAll('#point-mesh-list label').forEach(l => l.style.display = this.value === '' || l.textContent.toLowerCase().includes(this.value.toLowerCase()) ? '' : 'none')">
+                            <div id="point-mesh-list" class="mesh-checkbox-list">
+                                <!-- Dynamically populated -->
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                                <button class="btn btn-secondary btn-sm" id="point-mesh-select-all">Select All</button>
+                                <button class="btn btn-secondary btn-sm" id="point-mesh-deselect-all">Deselect
+                                    All</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>👁️ Borders Visibility</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <p class="field-hint" style="margin-bottom: 8px; color: #00C8FF; font-weight: bold;">Toggle
+                                borders when this point is clicked:</p>
+                            <input type="text" id="point-border-search" placeholder="Search borders..."
+                                style="width: 100%; margin-bottom: 8px; padding: 6px 8px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 4px; color: var(--text);"
+                                oninput="document.querySelectorAll('#point-border-list label').forEach(l => l.style.display = this.value === '' || l.textContent.toLowerCase().includes(this.value.toLowerCase()) ? '' : 'none')">
+
+                            <div id="point-border-list" class="mesh-checkbox-list">
+                                <!-- Dynamically populated -->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Properties -->
+                <div class="properties-section hidden" id="props-category">
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>📁 Category</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>Icon</label>
+                                <div id="cat-props-icon-preview" style="display: flex; align-items: center; gap: 8px;">
+                                    <!-- Dynamically populated -->
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary btn-sm"
+                                onclick="UI.showEditCategoryModal(State.state.selected.id)" style="margin-top: 8px;">
+                                ✏️ Edit Icon
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Names by Language</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content" id="cat-props-names">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>🔊 Click Sound</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>Sound</label>
+                                <select id="category-click-sound-source">
+                                    <option value="none">None (Use Default)</option>
+                                    <option value="url">Custom URL</option>
+                                </select>
+                            </div>
+                            <div id="category-sound-url-section" class="hidden" style="margin-top: 8px;">
+                                <input type="text" id="category-click-sound-url"
+                                    placeholder="https://example.com/sound.mp3" style="width: 100%;">
+                                <p class="field-hint">ℹ️ Direct link to MP3/OGG/WAV file</p>
+                                <button class="btn btn-secondary btn-sm" id="preview-category-sound"
+                                    style="margin-top: 8px;">▶ Preview</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>👁️ Mesh Visibility</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <p class="field-hint" style="margin-bottom: 8px;">Toggle meshes when category is opened:</p>
+                            <input type="text" id="category-mesh-search" placeholder="Search meshes..."
+                                style="width: 100%; margin-bottom: 8px; padding: 6px 8px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 4px; color: var(--text);"
+                                oninput="document.querySelectorAll('#category-mesh-list label').forEach(l => l.style.display = this.value === '' || l.textContent.toLowerCase().includes(this.value.toLowerCase()) ? '' : 'none')">
+                            <div id="category-mesh-list" class="mesh-checkbox-list">
+                                <!-- Dynamically populated -->
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                                <button class="btn btn-secondary btn-sm" id="category-mesh-select-all">Select
+                                    All</button>
+                                <button class="btn btn-secondary btn-sm" id="category-mesh-deselect-all">Deselect
+                                    All</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group danger-zone">
+                        <button class="btn btn-danger full" onclick="
+                            const id = State.state.selected.id;
+                            if (!id) { alert('No category selected'); return; }
+                            const cat = State.findById('categories', id);
+                            if (!cat) { alert('Category not found'); return; }
+                            const name = cat.names.en || cat.name || 'Category';
+                            if (confirm('Delete ' + name + '?')) {
+                                const points = State.getProject('points') || [];
+                                points.forEach(p => { if (p.categoryId === id) State.updateInProject('points', p.id, { categoryId: null }); });
+                                State.removeFromProject('categories', id);
+                                State.clearSelection();
+                                UI.updateHierarchy();
+                                UI.showToast('success', 'Category Deleted');
+                            }
+                        ">🗑️ Delete Category</button>
+                    </div>
+                </div>
+
+                <!-- Action Button Settings -->
+                <div class="properties-section hidden" id="props-action-button">
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>🎬 Action Button</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>Name</label>
+                                <input type="text" id="action-btn-name" placeholder="Button name">
+                            </div>
+                            <div class="prop-row">
+                                <label>Icon/Emoji</label>
+                                <input type="text" id="action-btn-icon" placeholder="▶" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Content Info</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content" id="action-btn-content-info">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+
+                    <div class="prop-group danger-zone">
+                        <button class="btn btn-danger full" id="delete-action-btn">🗑️ Delete Action Button</button>
+                    </div>
+                </div>
+
+                <!-- Text Box Settings -->
+                <div class="properties-section hidden" id="props-textbox">
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Text Box Settings</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>ID</label>
+                                <input type="text" id="textbox-id" readonly>
+                            </div>
+                            <div class="prop-row">
+                                <label>Language</label>
+                                <select id="textbox-language">
+                                    <option value="en">English</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Content</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>Heading</label>
+                                <input type="text" id="textbox-heading" placeholder="Enter heading...">
+                            </div>
+                            <div class="prop-row">
+                                <label>Body</label>
+                                <textarea id="textbox-body" rows="8" placeholder="Enter content..."></textarea>
+                            </div>
+                            <button class="prop-btn ai-btn" id="ai-translate">
+                                <span class="ai-icon">✨</span> AI Translate to All Languages
+                            </button>
+                            <button class="prop-btn ai-btn secondary" id="ai-enhance">
+                                <span class="ai-icon">✨</span> AI Enhance Content
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Styling</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>Header Color</label>
+                                <input type="color" id="textbox-header-color" value="#00C8FF">
+                            </div>
+                            <div class="prop-row">
+                                <label>Header Text</label>
+                                <input type="color" id="textbox-header-text-color" value="#FFFFFF">
+                            </div>
+                            <div class="prop-row">
+                                <label>Font Family</label>
+                                <select id="textbox-font-family">
+                                    <option value="Calibri" selected>Calibri</option>
+                                    <option value="Arial">Arial</option>
+                                    <option value="Georgia">Georgia</option>
+                                    <option value="Times New Roman">Times New Roman</option>
+                                    <option value="Verdana">Verdana</option>
+                                    <option value="Tahoma">Tahoma</option>
+                                    <option value="Trebuchet MS">Trebuchet MS</option>
+                                    <option value="Segoe UI">Segoe UI</option>
+                                </select>
+                            </div>
+                            <div class="prop-row">
+                                <label>Body Font Size</label>
+                                <select id="textbox-font-size">
+                                    <option value="">Use Global Setting</option>
+                                    <option value="14">14px</option>
+                                    <option value="18">18px</option>
+                                    <option value="25">25px</option>
+                                    <option value="30">30px</option>
+                                </select>
+                            </div>
+                            <div class="prop-row">
+                                <label>Line Height</label>
+                                <select id="textbox-line-height">
+                                    <option value="1.5">1.5</option>
+                                    <option value="1.6">1.6</option>
+                                    <option value="1.8" selected>1.8</option>
+                                    <option value="2.0">2.0</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Media</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>🖼️ Image (per language)</label>
+                            </div>
+                            <div id="textbox-image-languages" class="image-languages-container">
+                                <!-- English Image -->
+                                <div class="lang-image-section" data-lang="en">
+                                    <div class="lang-image-header">
+                                        <span class="lang-flag">🇬🇧</span>
+                                        <span class="lang-name">EN</span>
+                                    </div>
+                                    <button class="prop-btn lang-image-add-btn" data-lang="en">📷 Add Image</button>
+                                    <input type="file" class="lang-image-file" data-lang="en" accept="image/*" hidden>
+                                    <div class="media-preview hidden lang-image-preview" data-lang="en">
+                                        <img src="" alt="EN Preview">
+                                        <button class="media-remove lang-image-remove" data-lang="en">×</button>
+                                    </div>
+                                </div>
+                                <!-- Arabic Image -->
+                                <div class="lang-image-section" data-lang="ar">
+                                    <div class="lang-image-header">
+                                        <span class="lang-flag">🇸🇦</span>
+                                        <span class="lang-name">AR</span>
+                                    </div>
+                                    <button class="prop-btn lang-image-add-btn" data-lang="ar">📷 Add Image</button>
+                                    <input type="file" class="lang-image-file" data-lang="ar" accept="image/*" hidden>
+                                    <div class="media-preview hidden lang-image-preview" data-lang="ar">
+                                        <img src="" alt="AR Preview">
+                                        <button class="media-remove lang-image-remove" data-lang="ar">×</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="prop-row">
+                                <label>Video</label>
+                                <div class="source-toggle">
+                                    <label class="radio-label">
+                                        <input type="radio" name="video-source" value="upload" checked> Upload
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="video-source" value="url"> URL
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="video-upload-section">
+                                <button class="prop-btn" id="textbox-add-video">🎬 Upload Video</button>
+                            </div>
+                            <div id="video-url-section" class="hidden">
+                                <input type="text" id="textbox-video-url" placeholder="Paste any video URL...">
+                                <p class="field-hint">ℹ️ Paste any direct video link</p>
+                            </div>
+                            <div class="media-preview hidden" id="textbox-video-preview">
+                                <div class="video-thumb">🎬</div>
+                                <span class="media-name">video.mp4</span>
+                                <button class="media-remove" data-media="video">×</button>
+                            </div>
+
+                            <div class="prop-row">
+                                <label>🔊 Audio (per language)</label>
+                            </div>
+                            <div id="textbox-audio-languages" class="audio-languages-container">
+                                <!-- Will be populated dynamically with language audio inputs -->
+                            </div>
+
+                            <div class="prop-row">
+                                <label>📍 Google Maps Embed</label>
+                            </div>
+                            <input type="text" id="textbox-map-url" placeholder="Paste iframe code from Google Maps...">
+                            <p class="field-hint">ℹ️ Google Maps → Share → Embed a map → Copy iframe code</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Border Properties -->
+                <div class="properties-section hidden" id="props-border">
+                    <!-- Custom Settings Toggle -->
+                    <div class="prop-group">
+                        <div class="prop-group-content" style="padding: 8px 12px;">
+                            <div class="prop-row" style="margin-bottom: 0;">
+                                <label style="flex: 1;">Custom Settings</label>
+                                <label class="toggle">
+                                    <input type="checkbox" id="border-custom-settings">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <p class="field-hint" style="margin-top: 4px; font-size: 10px;">
+                                OFF = Changes apply to all borders. ON = Only this border.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Border Settings</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label>Name</label>
+                                <input type="text" id="border-name" placeholder="Border name...">
+                            </div>
+                            <div class="prop-row">
+                                <label>Type</label>
+                                <select id="border-type"
+                                    style="width: 60%; background: #333; color: white; border: 1px solid #444; padding: 4px; border-radius: 4px;">
+                                    <option value="tube">Tube</option>
+                                    <option value="plane">Plane</option>
+                                </select>
+                            </div>
+                            <div class="prop-row">
+                                <label>Border Color</label>
+                                <input type="color" id="border-color" value="#FFFF00">
+                            </div>
+                            <div class="prop-row">
+                                <label>Fill Color</label>
+                                <input type="color" id="border-fill-color" value="#FFFF00">
+                            </div>
+                            <div class="prop-row">
+                                <label>Thickness</label>
+                                <input type="range" id="border-thickness" min="1" max="10000" value="50"
+                                    style="flex: 1;">
+                                <input type="number" id="border-thickness-num" min="1" max="10000" value="50"
+                                    style="width: 60px; margin-left: 8px;">
+                            </div>
+                            <div class="prop-row">
+                                <label>Border Opacity</label>
+                                <input type="range" id="border-opacity" min="0" max="100" value="100">
+                                <span id="border-opacity-val">100%</span>
+                            </div>
+                            <div class="prop-row">
+                                <label>Fill Opacity</label>
+                                <input type="range" id="border-fill-opacity" min="0" max="100" value="40">
+                                <span id="border-fill-opacity-val">40%</span>
+                            </div>
+                            <div class="prop-row">
+                                <label>Smoothness</label>
+                                <input type="range" id="border-smoothness" min="0" max="200" value="50" step="10">
+                                <span id="border-smoothness-val">50</span>
+                            </div>
+                            <div class="prop-row">
+                                <label>Height</label>
+                                <input type="range" id="border-height" min="0" max="50" step="0.5" value="1">
+                                <span id="border-height-val">1</span>
+                            </div>
+                            <div class="prop-row">
+                                <label>Closed Loop</label>
+                                <label class="toggle">
+                                    <input type="checkbox" id="border-loop" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="prop-row">
+                                <label>Box Style</label>
+                                <label class="toggle">
+                                    <input type="checkbox" id="border-box-style">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="prop-row">
+                                <label>Fill Inside</label>
+                                <label class="toggle">
+                                    <input type="checkbox" id="border-fill">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Position Controls -->
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Position</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row triple">
+                                <label>Offset</label>
+                                <input type="number" id="border-offset-x" step="0.1" placeholder="X">
+                                <input type="number" id="border-offset-y" step="0.1" placeholder="Y">
+                                <input type="number" id="border-offset-z" step="0.1" placeholder="Z">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Visibility -->
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>👁️ Visibility</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="prop-row">
+                                <label style="flex-grow: 1;">Visible on Load</label>
+                                <input type="checkbox" id="border-visible-on-load"
+                                    onchange="UI.updateBorderProperty('visibleOnLoad', this.checked)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Apply to All -->
+                    <div class="prop-group">
+                        <div class="prop-group-content">
+                            <button class="btn btn-primary full" id="apply-to-all-borders-btn">
+                                📋 Apply Settings to All Borders
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prop-group danger-zone">
+                        <button class="btn btn-danger full" id="delete-border-btn">🗑️ Delete Border</button>
+                    </div>
+                </div>
+
+
+
+                <!-- Camera Settings -->
+                <div class="properties-section hidden" id="props-camera">
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Camera Settings</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+
+                            <div class="prop-row">
+                                <label>FOV</label>
+                                <input type="range" id="camera-fov" min="30" max="120" value="59">
+                                <span class="range-value">59°</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Camera Limits</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+
+                            <div class="prop-row">
+                                <label>Min Distance</label>
+                                <input type="number" id="camera-min-dist" value="10" min="1">
+                            </div>
+                            <div class="prop-row">
+                                <label>Max Distance</label>
+                                <input type="number" id="camera-max-dist" value="500" min="10">
+                            </div>
+                            <div class="prop-row">
+                                <label>Min Polar Angle</label>
+                                <input type="number" id="camera-min-polar" value="10" min="0" max="90">°
+                            </div>
+                            <div class="prop-row">
+                                <label>Max Polar Angle</label>
+                                <input type="number" id="camera-max-polar" value="80" min="0" max="90">°
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>🖥️ Desktop Default View</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <p class="prop-help">Camera position for PC/Desktop when the experience loads or recenter is
+                                clicked.</p>
+                            <button class="prop-btn full" id="set-default-view">📷 Set Current as Desktop
+                                Default</button>
+                            <button class="prop-btn full secondary" id="preview-default-view">👁 Preview Desktop
+                                View</button>
+                            <div class="default-view-status" id="default-view-status">
+                                <span class="status-icon">⚠️</span>
+                                <span class="status-text">No desktop view set</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>📱 Mobile Default View</span>
+                            <button class="collapse-btn">−</button>
+                        </div>
+                        <div class="prop-group-content">
+                            <p class="prop-help">Camera position for Mobile devices. Set a different angle for better
+                                mobile viewing.</p>
+                            <button class="prop-btn full" id="set-default-view-mobile">📷 Set Current as Mobile
+                                Default</button>
+                            <button class="prop-btn full secondary" id="preview-default-view-mobile">👁 Preview Mobile
+                                View</button>
+                            <div class="default-view-status" id="default-view-status-mobile">
+                                <span class="status-icon">⚠️</span>
+                                <span class="status-text">No mobile view set (will use desktop view)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prop-group">
+                        <div class="prop-group-header">
+                            <span>Saved Views</span>
+
+                        </div>
+                        <div class="prop-group-content">
+                            <div class="views-list" id="views-list">
+                                <div class="view-item">
+                                    <span>Initial View</span>
+                                    <button class="view-go">Go</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Global Search Bar + Recenter (Preview Mode) -->
+        <div id="global-search" class="global-search hidden">
+            <div class="search-container">
+                <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="currentColor"
+                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                </svg>
+                <input type="text" id="search-input" placeholder="Search points..." autocomplete="off">
+                <button class="search-clear hidden" id="search-clear">×</button>
+                <div class="search-results hidden" id="search-results">
+                    <!-- Results populated dynamically -->
+                </div>
+            </div>
+            <button id="recenter-btn" class="recenter-btn" title="Return to Default View">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                </svg>
+                <span>Re-center</span>
+            </button>
+        </div>
+
+        <!-- User-facing Bottom Menu Bar (Preview/Exported Mode) -->
+        <nav id="user-menu" class="user-menu hidden">
+            <div class="menu-categories" id="menu-categories">
+                <!-- Categories populated dynamically -->
+            </div>
+        </nav>
+
+        <!-- User-facing Sidebar (Preview/Exported Mode) -->
+        <aside id="user-sidebar" class="user-sidebar hidden">
+            <button class="sidebar-btn" data-action="toggle-sidebar" title="Toggle Menu">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="currentColor" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                </svg>
+            </button>
+            <button class="sidebar-btn" data-action="fullscreen" title="Fullscreen">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="currentColor"
+                        d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+                </svg>
+            </button>
+            <button class="sidebar-btn" data-action="toggle-audio" title="Toggle Audio">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="currentColor"
+                        d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                </svg>
+            </button>
+            <button class="sidebar-btn" data-action="show-info" title="Information">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="currentColor"
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                </svg>
+            </button>
+            <div class="sidebar-divider"></div>
+            <button class="sidebar-btn" data-action="show-all" id="show-all-btn" title="Show/Hide All Points">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="currentColor"
+                        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                </svg>
+            </button>
+            <button class="sidebar-btn" data-action="measure" title="Measure Distance">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="currentColor"
+                        d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h2v8z" />
+                </svg>
+            </button>
+            <button class="sidebar-btn" data-action="clear-measurements" title="Clear Measurements">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="currentColor"
+                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
+            </button>
+            <div class="sidebar-divider"></div>
+            <button class="sidebar-btn language-btn" data-action="change-language" title="Language">
+                <span class="lang-code">EN</span>
+            </button>
+            <div class="sidebar-divider"></div>
+            <button class="sidebar-btn" data-action="show-all" title="Show All Points">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="currentColor"
+                        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                </svg>
+            </button>
+        </aside>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <!-- Dynamic modals inserted here -->
+    </div>
+
+    <!-- Text Box Popup (User Mode) -->
+    <div id="textbox-popup" class="textbox-popup hidden">
+        <div class="textbox-header">
+            <h2 id="popup-title">Title</h2>
+            <button class="popup-close" data-action="close-popup">×</button>
+        </div>
+        <div class="textbox-toolbar">
+            <div class="language-toggle" id="popup-languages">
+                <button class="lang-btn active" data-lang="en">EN</button>
+            </div>
+            <div class="media-controls">
+                <button class="media-btn" data-action="show-image" title="View Image">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor"
+                            d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+                    </svg>
+                </button>
+                <button class="media-btn" data-action="play-video" title="Play Video">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor" d="M8 5v14l11-7z" />
+                    </svg>
+                </button>
+                <button class="media-btn" data-action="toggle-audio" title="Play Audio">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="textbox-content" id="popup-content">
+            <!-- Content loaded dynamically -->
+        </div>
+    </div>
+
+    <!-- Panorama Viewer -->
+    <div id="panorama-viewer" class="panorama-viewer hidden">
+        <button class="panorama-close" data-action="close-panorama">×</button>
+        <div class="panorama-container" id="panorama-container"></div>
+    </div>
+
+    <!-- Video Player Modal -->
+    <div id="video-modal" class="video-modal hidden">
+        <button class="video-close" data-action="close-video">×</button>
+        <video id="video-player" controls></video>
+    </div>
+
+    <!-- Hidden file inputs -->
+    <input type="file" id="file-mesh" accept=".glb,.gltf" hidden>
+    <input type="file" id="file-image" accept="image/*" hidden>
+    <input type="file" id="file-video" accept="video/*" hidden>
+    <input type="file" id="file-audio" accept="audio/*" hidden>
+    <input type="file" id="file-panorama" accept="image/*" hidden>
+    <input type="file" id="file-project" accept=".json,.sirah" hidden>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/TransformControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script src="js/utils.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/controls.js"></script>
+    <script src="js/loaders.js"></script>
+    <script src="js/points.js"></script>
+    <script src="js/content.js"></script>
+    <script src="js/pathAnimations.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
