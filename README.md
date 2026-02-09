@@ -2,7 +2,7 @@
 
 Vantage Engine is a powerful, web-based 3D Interactive Digital Twin app builder. It allows users to create immersive, 3D interactive maps and environments for historical, educational, and architectural purposes.
 
-![Vantage Logo](assets/vantage-logo.jpg)
+
 
 ## Features
 
